@@ -25,4 +25,10 @@ from scripts.To_CDE_Functions import FRET_2CDE, ALEX_2CDE
 from scripts.Read_PTU import read_data
 from alive_progress import alive_bar
 import time
+import os
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from scripts.Read_PTU import read_data
+import json
 import json
