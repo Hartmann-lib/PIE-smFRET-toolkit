@@ -12,4 +12,4 @@ Required Python packages:
 
 Usage:
 
-Use the scripts according to there name from S0 to S3. User input like, e.g., channel assignments or filter settings, is required in the parameter section in each script.
+Use the scripts according to there name in the order from S0 to S3. User input like, e.g., channel assignments or filter settings, is required in the parameter section in each script.
