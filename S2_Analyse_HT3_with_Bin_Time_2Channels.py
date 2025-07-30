@@ -11,7 +11,7 @@ import json
 #########################################################################
 DATA_FOLDER = "20240725HFRuler"
 
-SETTINGS_FILE = "Settings_20250730_094959"
+SETTINGS_FILE = "Settings_20250728_202520"
 
 BIN_T = 1 # (ms) bin time
 THRE_B = 30 # (kHz) lower intensity threshold for bin selection see ALGORITHM
