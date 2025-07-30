@@ -11,24 +11,24 @@ import pandas as pd
 # PARAMETER
 #########################################################################
 RESULTS_PATH = "results"
-RESULTS_FILE = "Results_Inside_droplets"
+RESULTS_FILE = "Results_20240725HFRuler"
 
 PATH_OUT='plots_and_histograms'
 
-boolPNG = 0 # export plots and histograms as PNG
-boolSVG = 0 # export plots and histograms as SVG
+boolPNG = 1 # export plots and histograms as PNG
+boolSVG = 1 # export plots and histograms as SVG
 boolEXCEL = 1 # export results as Excel sheet
 
 # correction factors for stoichiometry and FRET efficiency
-ALPHA = 0.05
-BETA = 0.05
-GAMMA = 0.8
+ALPHA = 0
+BETA = 0
+GAMMA = 1
 
 # donor only lifetime
 TAU_D0 = 3.6 # (ns)
 
 # common burst filter to filter for double labeled molecules
-NUM_PH = np.array([0, 220]) # minimal and maximal number of total photons
+NUM_PH = np.array([0, 500]) # minimal and maximal number of total photons
 BRD_S = np.array([-0.1, 1.1]) # lower and upper threshold of stoichiometry filter
 BRD_ALEX2CDE = np.array([-1, 200]) # lower and upper threshold of ALEX-2CDE filter
 
