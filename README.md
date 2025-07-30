@@ -3,9 +3,9 @@ Toolkit for single-molecule FRET (smFRET) experiments using Time-Correlated Sing
 
 Required Python packages:
 
-numpy
-matplotlib
-pandas
-openpyxl
-json
-alive_progress
+- numpy 
+- matplotlib
+- pandas
+- openpyxl
+- json
+- alive_progress
