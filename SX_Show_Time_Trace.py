@@ -8,7 +8,7 @@ import json
 
 # PARAMETER
 #########################################################################
-DATA_FOLDER = "Inside_droplets"
+DATA_FOLDER = "20240725HFRuler"
 
 SETTINGS_FILE = "Settings_20250730_094959"
 
