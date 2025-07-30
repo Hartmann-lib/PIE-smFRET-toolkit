@@ -9,12 +9,12 @@ import json
 
 # PARAMETER
 #########################################################################
-DATA_FOLDER = "Inside_droplets"
+DATA_FOLDER = "20240725HFRuler"
 
 SETTINGS_FILE = "Settings_20250730_094959"
 
 BIN_T = 1 # (ms) bin time
-THRE_B = 200 # (kHz) lower intensity threshold for bin selection see ALGORITHM
+THRE_B = 30 # (kHz) lower intensity threshold for bin selection see ALGORITHM
 ALGORITHM = 0 # 0 -> I_All >= THRE_B ... total intensity filter
               # 1 -> ((I_D + I_A) >= THRE_B) & (I_A0  >= THRE_B) ... demanding both active donor and active acceptor
               # 2 -> I_A0  >= THRE_B ... demanding active acceptor
