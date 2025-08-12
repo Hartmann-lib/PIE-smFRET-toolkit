@@ -7,7 +7,6 @@ Required Python packages:
 - matplotlib
 - pandas
 - openpyxl
-- json
 - alive_progress
 
 Usage:
