@@ -67,3 +67,5 @@ filter settings
               RATIO_NGNR ... lower and upper threshold of NG/NR filter
               BRD_TAU_D ... lower and upper threshold of donor lifetime
               BRD_TAU_A ... lower and upper threshold of acceptor lifetime
+
+<img src="images/Measurement_results.png" alt="Measurement results" width="600">
