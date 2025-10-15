@@ -73,5 +73,5 @@ filter settings
 
 SX: Time trace inspection of a single PTU file. Therefore, the measurement folder has to be specified and the settings file derived from script S0 has to be selected.
 
-<img src="images/Time_trace.png" alt="Time trace" width="1000">
+<img src="images/Time_trace.png" alt="Time trace" width="800">
 
