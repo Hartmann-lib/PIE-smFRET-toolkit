@@ -10,7 +10,7 @@ import json
 #########################################################################
 DATA_FOLDER = "20240725HFRuler"
 
-SETTINGS_FILE = "Settings_20250728_202520"
+SETTINGS_FILE = "Settings_20250930_215355"
 
 BIN_T = 1  # (ms) bin time to calculate time trace
 #########################################################################
@@ -31,7 +31,7 @@ FOLDER = os.path.basename(DATA_FOLDER)
 
 contPath = [f for f in os.listdir(DATA_FOLDER) if f.endswith('.ptu')]
 
-data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[0], 0)
+data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[0])
 
 # photon macrotimes
 macroAll = data[(((BRD_FRET[0] < data[:, 1]) & (data[:, 1] < BRD_FRET[1])) | ((BRD_ACC[0] < data[:, 1]) & (data[:, 1] < BRD_ACC[1]))), 2] * 1e-6 # (ms)

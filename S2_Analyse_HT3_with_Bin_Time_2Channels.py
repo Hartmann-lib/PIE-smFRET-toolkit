@@ -9,20 +9,20 @@ import json
 
 # PARAMETER
 #########################################################################
-DATA_FOLDER = "20240725HFRuler"
+DATA_FOLDER = "20250926_hpT5_100mM_NaCl_PTU"
 
-SETTINGS_FILE = "Settings_20250728_202520"
+SETTINGS_FILE = "Settings_20251001_214343"
 
 BIN_T = 1 # (ms) bin time
-THRE_B = 30 # (kHz) lower intensity threshold for bin selection see ALGORITHM
+THRE_B = 50 # (kHz) lower intensity threshold for bin selection see ALGORITHM
 ALGORITHM = 0 # 0 -> I_All >= THRE_B ... total intensity filter
               # 1 -> ((I_D + I_A) >= THRE_B) & (I_A0  >= THRE_B) ... demanding both active donor and active acceptor
               # 2 -> I_A0  >= THRE_B ... demanding active acceptor
               # 3 -> (I_D + I_A)  >= THRE_B ... demanding active donor
               # 4 -> I_D  >= THRE_B ... demanding donor counts
 
-MEAN_IRF_DONOR = 2 # (ns) mean lifetime of the donor IRF
-MEAN_IRF_ACCEPTOR = 27 # (ns) mean lifetime of the acceptor IRF
+MEAN_IRF_DONOR = 1.683 # (ns) mean lifetime of the donor IRF
+MEAN_IRF_ACCEPTOR = 22.5871 # (ns) mean lifetime of the acceptor IRF
 #########################################################################
 
 mpl.use('TkAgg') # uses external plotting
@@ -37,6 +37,22 @@ class NumpyEncoder(json.JSONEncoder):
 # Load settings
 with open(os.path.join("settings", f"{SETTINGS_FILE}.json"), 'r') as f:
     settings = json.load(f)
+
+def histc(x, edges):
+
+    x = np.asarray(x)
+    edges = np.asarray(edges)
+
+    # create histogram counts
+    counts, _ = np.histogram(x, bins=edges)
+
+    # copying MATLAB handling of the last bin
+    last_bin_count = np.sum(x == edges[-1])
+    counts = np.append(counts, last_bin_count)
+
+    bins = np.digitize(x, edges, right=True)
+
+    return counts, bins
 
 BRD_FRET = settings['FRET'] # microtime borders for FRET
 BRD_ACC = settings['Acceptor'] # microtime borders for acceptor check
@@ -55,17 +71,17 @@ contPath = [f for f in os.listdir(DATA_FOLDER) if f.endswith('.ptu')]
 numF = len(contPath)
 
 # arrays to collect the data
-data_BN = np.empty((0, 1))
-data_PosT = np.empty((0, 1))
-data_BIN_T = np.empty((0, 1))
-data_ID = np.empty((0, 1))
-data_IA = np.empty((0, 1))
-data_IA0 = np.empty((0, 1))
-data_TauD = np.empty((0, 1))
-data_TauA0 = np.empty((0, 1))
-data_FRET2CDE = np.empty((0, 1))
-data_ALEX2CDE = np.empty((0, 1))
-data_DTGR_TR0 = np.empty((0, 1))
+data_BN = np.empty((0,), dtype=int)
+data_PosT = np.empty((0,), dtype=float)
+data_BIN_T = np.empty((0,), dtype=float)
+data_ID = np.empty((0,), dtype=int)
+data_IA = np.empty((0,), dtype=int)
+data_IA0 = np.empty((0,), dtype=int)
+data_TauD = np.empty((0,), dtype=float)
+data_TauA0 = np.empty((0,), dtype=float)
+data_FRET2CDE = np.empty((0,), dtype=float)
+data_ALEX2CDE = np.empty((0,), dtype=float)
+data_DTGR_TR0 = np.empty((0,), dtype=float)
 
 BN = 1
 
@@ -77,7 +93,7 @@ with alive_bar(numF, force_tty=True) as bar:
 
     for iterF in range(numF):
 
-        data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[iterF], 0)
+        data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[iterF])
 
         # photon arrival times -> macrotimes
         macroAll = data[(((BRD_FRET[0] < data[:, 1]) & (data[:, 1] < BRD_FRET[1])) | ((BRD_ACC[0] < data[:, 1]) & (data[:, 1] < BRD_ACC[1]))), 2] * 1e-6 # (ms)
@@ -96,9 +112,9 @@ with alive_bar(numF, force_tty=True) as bar:
         edges = np.arange(0, macroAll[-1], BIN_T) # (ms)
 
         # calculate histograms
-        I_D, _ = np.histogram(macroD, bins=np.append(edges, edges[-1] + BIN_T))  # (kHz)
-        I_A, _ = np.histogram(macroA, bins=np.append(edges, edges[-1] + BIN_T))  # (kHz)
-        I_A0, _ = np.histogram(macroA0, bins=np.append(edges, edges[-1] + BIN_T))  # (kHz)
+        I_D, _ = histc(macroD, edges)
+        I_A, _ = histc(macroA, edges)
+        I_A0, _ = histc(macroA0, edges)
 
         I_All = I_D + I_A + I_A0 # (kHz) total intensity
 
@@ -127,6 +143,9 @@ with alive_bar(numF, force_tty=True) as bar:
         numB = len(posB) # number of bursts
 
         # collect microtime information inside bursts -> arrays of parameters
+        arrID = np.zeros(numB)
+        arrIA = np.zeros(numB)
+        arrIA0 = np.zeros(numB)
         arrTauD = np.zeros(numB)
         arrTauA0 = np.zeros(numB)
         arrFRET2CDE = np.zeros(numB)
@@ -137,15 +156,19 @@ with alive_bar(numF, force_tty=True) as bar:
 
         for iterA in range(numB):
 
-            sub_macroAll = macroAll[(edges[posB[iterA]] <= macroAll) & ( macroAll < (edges[posB[iterA]] + BIN_T))] # (ms)
+            sub_macroAll = macroAll[(edges[posB[iterA]] <= macroAll) & (macroAll < (edges[posB[iterA]] + BIN_T))] # (ms)
             sub_macroD = macroD[(edges[posB[iterA]] <= macroD) & (macroD < (edges[posB[iterA]] + BIN_T))] # (ms)
-            sub_macroA = macroA[(edges[posB[iterA]] <= macroA) & ( macroA < (edges[posB[iterA]] + BIN_T))] # (ms)
+            sub_macroA = macroA[(edges[posB[iterA]] <= macroA) & (macroA < (edges[posB[iterA]] + BIN_T))] # (ms)
             sub_macroA0 = macroA0[(edges[posB[iterA]] <= macroA0) & (macroA0 < (edges[posB[iterA]] + BIN_T))]  # (ms)
 
             sub_macroDA = macroDA[(edges[posB[iterA]] <= macroDA) & (macroDA < (edges[posB[iterA]] + BIN_T))] # (ms)
 
             sub_microD = microD[(edges[posB[iterA]] <= macroD) & (macroD < (edges[posB[iterA]] + BIN_T))]  # (ns)
             sub_microA0 = microA0[(edges[posB[iterA]] <= macroA0) & (macroA0 < (edges[posB[iterA]] + BIN_T))]  # (ns)
+
+            arrID[iterA] = len(sub_macroD)
+            arrIA[iterA] = len(sub_macroA)
+            arrIA0[iterA] = len(sub_macroA0)
 
             # fluorescence lifetime calculation
             if len(sub_microD) == 0:
@@ -161,12 +184,12 @@ with alive_bar(numF, force_tty=True) as bar:
                 arrTauA0[iterA] = np.mean(sub_microA0) - MEAN_IRF_ACCEPTOR  # (ns)
 
             # Photon density indicators
-            if (len(sub_macroDA) == 0) or (len(sub_macroD) == 0):
+            if (len(sub_macroA) == 0) or (len(sub_macroD) == 0):
 
                 arrFRET2CDE[iterA] = 0
 
             else:
-                arrFRET2CDE[iterA] = FRET_2CDE(sub_macroDA, sub_macroD, 0.045) # kernel size is taken from the paper
+                arrFRET2CDE[iterA] = FRET_2CDE(sub_macroA, sub_macroD, 0.045) # kernel size is taken from the paper
 
             # Photon density indicators
             if (len(sub_macroA0) == 0) or (len(sub_macroDA) == 0):
@@ -191,17 +214,17 @@ with alive_bar(numF, force_tty=True) as bar:
             arrPosT[iterA] = np.mean(sub_macroAll) / 1000 + iterF * lenT # (s)
 
         # add data to output arrays
-        data_BN = np.append(data_BN, np.arange(BN, BN + numB))
-        data_PosT = np.append(data_PosT, arrPosT)
-        data_BIN_T = np.append(data_BIN_T, BIN_T * np.ones(numB))
-        data_ID = np.append(data_ID, I_D[idx])
-        data_IA = np.append(data_IA, I_A[idx])
-        data_IA0 = np.append(data_IA0, I_A0[idx])
-        data_TauD = np.append(data_TauD, arrTauD)
-        data_TauA0 = np.append(data_TauA0, arrTauA0)
-        data_FRET2CDE = np.append(data_FRET2CDE, arrFRET2CDE)
-        data_ALEX2CDE = np.append(data_ALEX2CDE, arrALEX2CDE)
-        data_DTGR_TR0 = np.append(data_DTGR_TR0, arrDTGR_TR0)
+        data_BN = np.concatenate([data_BN, np.arange(BN, BN + numB, dtype=int)])
+        data_PosT = np.concatenate([data_PosT, arrPosT])
+        data_BIN_T = np.concatenate([data_BIN_T, BIN_T * np.ones(numB)])
+        data_ID = np.concatenate([data_ID, arrID.astype(int)])
+        data_IA = np.concatenate([data_IA, arrIA.astype(int)])
+        data_IA0 = np.concatenate([data_IA0, arrIA0.astype(int)])
+        data_TauD = np.concatenate([data_TauD, arrTauD])
+        data_TauA0 = np.concatenate([data_TauA0, arrTauA0])
+        data_FRET2CDE = np.concatenate([data_FRET2CDE, arrFRET2CDE])
+        data_ALEX2CDE = np.concatenate([data_ALEX2CDE, arrALEX2CDE])
+        data_DTGR_TR0 = np.concatenate([data_DTGR_TR0, arrDTGR_TR0])
 
         BN = BN + numB # increase burst number
 

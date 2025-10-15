@@ -3,6 +3,7 @@ import tkinter as tk
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from tkinter import filedialog, Tk, messagebox
 import json
 from scripts.Scatter2Density import Scatter2Density
@@ -11,7 +12,7 @@ import pandas as pd
 # PARAMETER
 #########################################################################
 RESULTS_PATH = "results"
-RESULTS_FILE = "Results_20240725HFRuler"
+RESULTS_FILE = "Results_20250926_hpT5_100mM_NaCl_PTU"
 
 PATH_OUT='plots_and_histograms'
 
@@ -20,21 +21,21 @@ boolSVG = 1 # export plots and histograms as SVG
 boolEXCEL = 1 # export results as Excel sheet
 
 # correction factors for stoichiometry and FRET efficiency
-ALPHA = 0
-BETA = 0
-GAMMA = 1
+ALPHA = 0.0416
+BETA = 0.0236
+GAMMA = 0.6273
 
 # donor only lifetime
-TAU_D0 = 3.6 # (ns)
+TAU_D0 = 2.5 # (ns)
 
 # common burst filter to filter for double labeled molecules
 NUM_PH = np.array([0, 500]) # minimal and maximal number of total photons
-BRD_S = np.array([-0.1, 1.1]) # lower and upper threshold of stoichiometry filter
-BRD_ALEX2CDE = np.array([-1, 200]) # lower and upper threshold of ALEX-2CDE filter
+BRD_S = np.array([0.2, 0.8]) # lower and upper threshold of stoichiometry filter
+BRD_ALEX2CDE = np.array([-1, 12]) # lower and upper threshold of ALEX-2CDE filter
 
 # special burst filter - usually kept open!!!
 BRD_E = np.array([-0.1, 1.1]) # lower and upper threshold of stoichiometry filter
-BRD_FRET2CDE = np.array([-1, 1000]) # lower and upper threshold of FRET-2CDE filter
+BRD_FRET2CDE = np.array([-1000, 1000]) # lower and upper threshold of FRET-2CDE filter
 RATIO_NGNR = np.array([-10, 10]) # lower and upper threshold of NG/NR filter
 BRD_TAU_D = np.array([-100, 100]) # lower and upper threshold of donor lifetime
 BRD_TAU_A = np.array([-100, 100]) # lower and upper threshold of acceptor lifetime
@@ -141,30 +142,33 @@ else:
     ax1, ax2, ax3, ax4, ax5, ax6 = axs.flatten()
     f1.suptitle(RESULTS_FILE)
 
+    # Create a custom colormap: white -> red
+    cmap = LinearSegmentedColormap.from_list('white_red', ['white', 'red'])
+
     # FRET efficiency vs. Stoichiometry plot
-    sel_E, sel_S, z_ES = Scatter2Density(sel_E, sel_S)
+    sel_E1, sel_S1, z_ES1 = Scatter2Density(sel_E, sel_S)
 
     ax1.scatter(E, S, c='black', s=2)
-    ax1.scatter(sel_E, sel_S, c=z_ES, s=7, cmap='jet')
+    ax1.scatter(sel_E1, sel_S1, c=z_ES1, s=7, cmap='jet')
     ax1.set_xlim(-0.1, 1.1)
     ax1.set_ylim(-0.1, 1.1)
     ax1.set_xlabel('FRET efficiency, $E$')
     ax1.set_ylabel('Stoichiometry, $S$')
 
     # FRET efficiency vs. FRET-2CDE plot
-    sel_E, sel_ALEX2CDE, z_EA2E = Scatter2Density(sel_E, sel_ALEX2CDE)
+    sel_E2, sel_ALEX2CDE2, z_EA2E2 = Scatter2Density(sel_E, sel_ALEX2CDE)
 
     ax2.scatter(E, ALEX2CDE, c='black', s=2)
-    ax2.scatter(sel_E, sel_ALEX2CDE, c=z_EA2E, s=7, cmap='jet')
+    ax2.scatter(sel_E2, sel_ALEX2CDE2, c=z_EA2E2, s=7, cmap='jet')
     ax2.set_xlim(-0.1, 1.1)
     ax2.set_ylim(0, 110)
     ax2.set_xlabel('FRET efficiency, $E$')
     ax2.set_ylabel('ALEX-2CDE')
 
     # FRET efficiency vs. FRET-2CDE plot
-    sel_E, sel_FRET2CDE, z_EF2E = Scatter2Density(sel_E, sel_FRET2CDE)
+    sel_E3, sel_FRET2CDE3, z_EF2E3 = Scatter2Density(sel_E, sel_FRET2CDE)
 
-    ax3.scatter(sel_E, sel_FRET2CDE, c=z_EF2E, s=7, cmap='jet')
+    ax3.scatter(sel_E3, sel_FRET2CDE3, c=z_EF2E3, s=7, cmap='jet')
     ax3.set_xlim(-0.1, 1.1)
     ax3.set_ylim(0, 110)
     ax3.set_xlabel('FRET efficiency, $E$')
@@ -181,9 +185,9 @@ else:
     sel_En = sel_E[idx_number]
     sel_Rel_TauDn = sel_Rel_TauD[idx_number] # NaN filtered molecules
 
-    sel_En, sel_Rel_TauDn, z_ETD = Scatter2Density(sel_En, sel_Rel_TauDn)
+    sel_En5, sel_Rel_TauDn5, z_ETD5 = Scatter2Density(sel_En, sel_Rel_TauDn)
 
-    ax5.scatter(sel_En, sel_Rel_TauDn, c=z_ETD, s=7, cmap='jet')
+    ax5.scatter(sel_En5, sel_Rel_TauDn5, c=z_ETD5, s=7, cmap='jet')
     ax5.plot(np.array([0, 1]), np.array([1, 0]), color='black')
     ax5.set_xlim(-0.1, 1.1)
     ax5.set_ylim(-0.1, 1.1)

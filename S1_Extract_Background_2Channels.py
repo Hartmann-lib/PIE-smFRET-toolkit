@@ -7,9 +7,9 @@ import json
 
 # PARAMETER
 #########################################################################
-DATA_FOLDER = "20240725HFRuler"
+DATA_FOLDER = "20250926_hpT5_100mM_NaCl_PTU"
 
-SETTINGS_FILE = "Settings_20250728_202520"
+SETTINGS_FILE = "Settings_20251001_214343"
 
 BIN_T = 1  # (ms) bin time to calculate time trace
 FRAC_T = 0.5  # (s) trace part to be analyzed
@@ -47,7 +47,7 @@ for iterF in range(NUM_F):
 
     idx = iterF * len(contPath) // NUM_F
 
-    data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[idx], 0)
+    data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[idx])
 
     # photon macrotimes
     macroAll = data[(((BRD_FRET[0] < data[:, 1]) & (data[:, 1] < BRD_FRET[1])) | ((BRD_ACC[0] < data[:, 1]) & (data[:, 1] < BRD_ACC[1]))), 2] * 1e-6 # (ms)

@@ -8,10 +8,10 @@ import json
 
 # PARAMETER
 #########################################################################################
-DATA_FOLDER = "DDX3X"
+DATA_FOLDER = "20250926_hpT5_100mM_NaCl_PTU"
 
-DONOR_CHANNEL = 1 # detection channel of the donor signal
-ACCEPTOR_CHANNEL = 2 # detection channel of the acceptor signal
+DONOR_CHANNEL = 2 # detection channel of the donor signal
+ACCEPTOR_CHANNEL = 1 # detection channel of the acceptor signal
 
 NUM_CHANNELS = 0 # number of microtime channels - gets calculated from data files if zero
 #########################################################################################
@@ -22,7 +22,7 @@ mpl.use('TkAgg') # uses external plotting
 contPath = [f for f in os.listdir(DATA_FOLDER) if f.endswith('.ptu')]
 
 # read first file
-data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[0], 1)
+data, unit, globRes, binRes = read_data(DATA_FOLDER + '/' + contPath[0])
 
 dt = np.round(binRes*1e12).astype(int) # (ps) temporal resolution of microtime channels
 
@@ -96,6 +96,9 @@ ax2.set_ylabel('Detector ' + str(ACCEPTOR_CHANNEL))
 ax2.set_xlabel('Channel')
 
 # Save settings
+if not os.path.exists("settings"):
+    os.makedirs("settings")
+
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 figpath = os.path.join("settings", f"Selected_time_windows_{timestamp}.png")
 f1.savefig(figpath)
