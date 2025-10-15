@@ -47,6 +47,8 @@ If not existing the script creates a results folder and saves all information in
 
 S3: Visualization and export of the data analysis result. Therefore, the results path and results filename has to be specified. Further settings are:
 
+<img src="images/Measurement_results.png" alt="Measurement results" width="1000">
+
  boolean settings for data export
  
               boolPNG ... if set to 1 plots and histograms will be export as PNG
@@ -69,7 +71,7 @@ filter settings
               BRD_TAU_D ... lower and upper threshold of donor lifetime
               BRD_TAU_A ... lower and upper threshold of acceptor lifetime
 
-<img src="images/Measurement_results.png" alt="Measurement results" width="1000">
-
 SX: Time trace inspection of a single PTU file. Therefore, the measurement folder has to be specified and the settings file derived from script S0 has to be selected.
+
+<img src="images/Time_trace.png" alt="Time trace" width="1000">
 
