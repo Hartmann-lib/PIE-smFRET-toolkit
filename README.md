@@ -33,6 +33,8 @@ Therefore, the measurement folder has to be specified and the settings file deri
 
 If not existing the script creates a results folder and saves all information in a json-file with the name of the measurement folder starting with "BG_".              
 
+<img src="images/Background_extraction.png.png" alt="Background extraction" width="600">
+
 S2: Analysis of the measured PTU files. Therefore, the measurement folder has to be specified and the settings file derived from script S0 has to be selected. Further settings are:
 
               BIN_T ... the bin time to calculate the time trace from the photon arrival times
