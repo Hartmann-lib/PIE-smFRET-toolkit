@@ -68,4 +68,4 @@ filter settings
               BRD_TAU_D ... lower and upper threshold of donor lifetime
               BRD_TAU_A ... lower and upper threshold of acceptor lifetime
 
-<img src="images/Measurement_results.png" alt="Measurement results" width="600">
+<img src="images/Measurement_results.png" alt="Measurement results" width="1000">
