@@ -63,9 +63,13 @@ filter settings
               BRD_S ... lower and upper threshold of stoichiometry filter
               BRD_ALEX2CDE ... lower and upper threshold of ALEX-2CDE filter
               BRD_E ... lower and upper threshold of stoichiometry filter
+
               BRD_FRET2CDE ... lower and upper threshold of FRET-2CDE filter
               RATIO_NGNR ... lower and upper threshold of NG/NR filter
               BRD_TAU_D ... lower and upper threshold of donor lifetime
               BRD_TAU_A ... lower and upper threshold of acceptor lifetime
 
 <img src="images/Measurement_results.png" alt="Measurement results" width="1000">
+
+SX: Time trace inspection of a single PTU file. Therefore, the measurement folder has to be specified and the settings file derived from script S0 has to be selected.
+
