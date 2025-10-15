@@ -16,6 +16,8 @@ Use the scripts according to there name in the order from S0 to S3. User input l
 S0: Defines the microtime windows of donor excitation donor/acceptor emission and acceptor excitation acceptor emission.
 In order to load example data for window selection, a folder has to be specified in the parameter section. Furthermore, the number of the donor and acceptor channels have to be set.
 
+[Selected Microtime Windows](images/Selected_time_windows_20251015_181344.png)
+
 S1: Extracts the background counts from the measurement files:
 
               BD ... average background intensity of the donor channel after donor excitation
