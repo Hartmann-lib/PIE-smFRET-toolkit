@@ -44,6 +44,7 @@ If not existing the script creates a results folder and saves all information in
 S3: Visualization and export of the data analysis result. Therefore, the results path and results filename has to be specified. Further settings are:
 
  boolean settings for data export
+ 
               boolPNG ... if set to 1 plots and histograms will be export as PNG
               boolSVG ... if set to 1 plots and histograms will be export as SVG
               boolEXCEL ... if set to 1 the fluorescence parameter will be export in a Excel sheet
@@ -53,6 +54,7 @@ S3: Visualization and export of the data analysis result. Therefore, the results
               TAU_D0 ... donor lifetime in the absence of the acceptor
 
 filter settings
+
               NUM_PH ... minimal and maximal number of total photons
               BRD_S ... lower and upper threshold of stoichiometry filter
               BRD_ALEX2CDE ... lower and upper threshold of ALEX-2CDE filter
