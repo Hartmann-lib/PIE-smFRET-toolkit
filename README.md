@@ -20,6 +20,7 @@ S1: Extracts the background counts from the measurement files:
               BD ... average background intensity of the donor channel after donor excitation
               BA ... average background intensity of the acceptor channel after donor excitation
               BA0 ... average background intensity of the acceptor channel after acceptor excitation
+              
 Therefore, the measurement folder has to be specified and the settings file derived from script S0 has to be selected. Further settings are:
 
               BIN_T ... the bin time to calculate the time trace from the photon arrival times
