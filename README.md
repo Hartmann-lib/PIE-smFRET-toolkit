@@ -77,4 +77,4 @@ SX1: Time trace inspection of a single PTU file. Therefore, the measurement fold
 
 SX2: Calculation of the mean delay time of the instrumental response function (IRF) of the donor and the acceptor detection channel, respectively. The script loads two PTU files - a measurement of freely diffusing donor and freely diffusing acceptor dye in saturated potasium iodide solution. The folder containing both dye measurements has to be specified and the settings file derived from script S0 has to be selected.
 
-<img src="images/IRF_mean_delay_time_20251029_180431.png" alt="IRF decays" width="800">
+<img src="images/IRF_mean_delay_time_20251029_180431.png" alt="IRF decays" width="600">
