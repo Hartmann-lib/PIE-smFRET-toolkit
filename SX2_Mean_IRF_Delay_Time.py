@@ -34,22 +34,27 @@ DT_BIN = settings['dt'] # (ps) microtime resolution per channel
 DONOR_CHANNEL = settings['Donor_channel'] # channel of the donor signal
 ACCEPTOR_CHANNEL = settings['Acceptor_channel'] # channel of the acceptor signal
 
+# loading of the donor and acceptor IRF
 dataD, unitD, globResD, binResD = read_data(DATA_FOLDER + '/' + DATA_FILE_DONOR + '.ptu')
 dataA, unitA, globResA, binResA = read_data(DATA_FOLDER + '/' + DATA_FILE_ACCEPTOR + '.ptu')
 
+# microtime channels
 microD = dataD[(BRD_FRET[0] < dataD[:, 1]) & (dataD[:, 1] < BRD_FRET[1]) & (dataD[:, 0] == DONOR_CHANNEL), 1]  # channel
 microA = dataA[(BRD_ACC[0] < dataA[:, 1]) & (dataA[:, 1] < BRD_ACC[1]) & (dataA[:, 0] == ACCEPTOR_CHANNEL), 1]  # channel
 
+# microtime bin edges
 edgesD = np.arange(BRD_FRET[0], BRD_FRET[1])
 edgesA = np.arange(BRD_ACC[0], BRD_ACC[1])
 
-# calculate microtime histograms
+# calculation of microtime histograms
 hD, _ = np.histogram(microD, bins=np.append(edgesD, edgesD[-1] + 1))
 hA, _ = np.histogram(microA, bins=np.append(edgesA, edgesA[-1] + 1))
 
+# background substraction
 hD_bg = hD - np.mean(hD[-100:])
 hA_bg = hA - np.mean(hA[-100:])
 
+# calculation of the mean delay time
 MEAN_IRF_DONOR = (np.sum(hD_bg * edgesD) / np.sum(hD_bg)) * DT_BIN * 1e-3  # (ns)
 MEAN_IRF_ACCEPTOR = (np.sum(hA_bg * edgesA) / np.sum(hA_bg)) * DT_BIN * 1e-3  # (ns)
 
